@@ -1,0 +1,68 @@
+package main
+
+import (
+	"fmt"
+)
+
+type ListNode struct {
+	Val  int
+	Next *ListNode
+}
+
+func doubleLinkedList(head *ListNode) *ListNode {
+	current := head
+	previous := current
+	carry := 0
+
+	for current != nil {
+		current.Val = current.Val*2 + carry
+		if current.Val >= 10 {
+			if previous == current {
+				newNode := &ListNode{Val: 0}
+				newNode.Val = 1
+				newNode.Next = current
+				current.Val = current.Val % 10
+				head = newNode
+			} else {
+				fmt.Println(previous.Val)
+				current.Val = current.Val % 10
+				carry = 1
+				previous.Val += carry
+				previous = current
+				carry = 0
+			}
+		}
+		previous = current
+		current = current.Next
+	}
+
+	return head
+}
+
+func printList(head *ListNode) {
+	current := head
+	for current != nil {
+		fmt.Print(current.Val)
+		if current.Next != nil {
+			fmt.Print(" -> ")
+		}
+		current = current.Next
+	}
+	fmt.Println()
+}
+
+func main() {
+	// Example 1
+	head1 := &ListNode{Val: 1, Next: &ListNode{Val: 8, Next: &ListNode{Val: 9}}}
+	fmt.Println("Input 1:")
+	head := doubleLinkedList(head1)
+	printList(head)
+	head2 := &ListNode{Val: 9, Next: &ListNode{Val: 9, Next: &ListNode{Val: 9}}}
+	fmt.Println("Input 2:")
+	head = doubleLinkedList(head2)
+	printList(head)
+	head3 := &ListNode{Val: 1, Next: &ListNode{Val: 0, Next: &ListNode{Val: 5}}}
+	fmt.Println("Input 3:")
+	head = doubleLinkedList(head3)
+	printList(head)
+}
